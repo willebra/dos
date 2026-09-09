@@ -21,13 +21,13 @@ jobs:
 
         steps:
             - name: Check out code
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+              uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
 
             - name: Cache Docker layers
-              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
               with:
                   path: /tmp/.buildx-cache
                   key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -35,13 +35,13 @@ jobs:
                       ${{ runner.os }}-buildx-
 
             - name: Log in to Docker Hub
-              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+              uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
               with:
                   username: ${{ secrets.DOCKER_HUB_USERNAME }}
                   password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
             - name: Log in to GitHub Packages
-              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+              uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
               with:
                   registry: ghcr.io
                   username: ${{ github.actor }}
@@ -49,7 +49,7 @@ jobs:
 
             - name: Docker metadata for Worker
               id: meta-worker
-              uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
+              uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
               with:
                   images: |
                       ${{ secrets.DOCKER_HUB_USERNAME }}/worker
@@ -59,7 +59,7 @@ jobs:
                       type=raw,value=latest
 
             - name: Build and push Worker Docker image
-              uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+              uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
               continue-on-error: false
               with:
                   context: .
@@ -72,7 +72,7 @@ jobs:
 
             - name: Docker metadata for API
               id: meta-api
-              uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
+              uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
               with:
                   images: |
                       ${{ secrets.DOCKER_HUB_USERNAME }}/api
@@ -82,7 +82,7 @@ jobs:
                       type=raw,value=latest
 
             - name: Build and push API Docker image
-              uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+              uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
               continue-on-error: false
               with:
                   context: .
@@ -95,7 +95,7 @@ jobs:
 
             - name: Docker metadata for Clearance UI
               id: meta-clearance-ui
-              uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
+              uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
               with:
                   images: |
                       ${{ secrets.DOCKER_HUB_USERNAME }}/clearance-ui
@@ -105,7 +105,7 @@ jobs:
                       type=raw,value=latest
 
             - name: Build and push API Docker image
-              uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+              uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
               continue-on-error: false
               with:
                   build-args: |

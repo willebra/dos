@@ -21,13 +21,13 @@
     "dependencies": {
         "@keycloak/keycloak-admin-client": "^26.5.0",
         "@prisma/client": "6.19.3",
-        "adm-zip": "0.5.17",
+        "adm-zip": "0.6.0",
         "common-helpers": "*",
         "s3-helpers": "*"
     },
     "devDependencies": {
         "@types/adm-zip": "0.5.8",
-        "@types/node": "24.12.2",
+        "@types/node": "24.13.3",
         "eslint-config-custom-server": "*",
         "prisma": "6.19.3",
         "ts-node": "10.9.2",

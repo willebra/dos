@@ -1,11 +1,8 @@
-// SPDX-FileCopyrightText: 2024 Double Open Oy
+// SPDX-FileCopyrightText: 2026 Double Open Oy
 //
 // SPDX-License-Identifier: MIT
 
-import { useEffect, useState } from "react";
-import { CellContext } from "@tanstack/react-table";
-import { ZodiosResponseByAlias } from "@zodios/core";
-import { userAPI, validReasons } from "validation-helpers";
+import { CellContext, RowData } from "@tanstack/react-table";
 import {
     Select,
     SelectContent,
@@ -16,27 +13,16 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-type PathExclusion = ZodiosResponseByAlias<
-    typeof userAPI,
-    "GetPathExclusions"
->["pathExclusions"][number];
-
-const TableCellSelect = ({
+const EditableSelectTableCell = <TData extends RowData>({
     getValue,
     row,
     column,
     table,
-}: CellContext<PathExclusion, unknown>) => {
+}: CellContext<TData, unknown>) => {
     const initialValue = getValue();
+    const value = typeof initialValue === "string" ? initialValue : "";
     const columnMeta = column.columnDef.meta;
     const tableMeta = table.options.meta;
-    const [value, setValue] = useState(
-        typeof initialValue === "string" ? initialValue : "",
-    );
-
-    useEffect(() => {
-        setValue(typeof initialValue === "string" ? initialValue : "");
-    }, [initialValue]);
 
     if (tableMeta?.selectedRowsForEditing[parseInt(row.id)]) {
         return (
@@ -44,32 +30,34 @@ const TableCellSelect = ({
                 value={value}
                 onValueChange={(selected) => {
                     tableMeta?.updateData(row.index, column.id, selected);
-                    setValue(selected);
                 }}
                 name={column.id}
                 aria-label={column.id}
             >
                 <SelectTrigger>
-                    <SelectValue placeholder="Select a valid reason..." />
+                    <SelectValue placeholder="Select a value..." />
                 </SelectTrigger>
                 <SelectContent>
-                    {validReasons.map((reason) => (
-                        <SelectGroup key={reason.name}>
+                    {columnMeta?.selectOptions?.map((option) => (
+                        <SelectGroup key={option.value}>
                             <SelectItem
-                                value={reason.name}
+                                value={option.value}
                                 className="py-0.5 text-xs"
                             >
-                                {reason.name}
+                                {option.label}
                             </SelectItem>
-                            <SelectLabel className="text-muted-foreground mb-1 ml-5 py-0.5 text-xs font-normal italic">
-                                {reason.description}
-                            </SelectLabel>
+                            {option.description ? (
+                                <SelectLabel className="text-muted-foreground mb-1 ml-5 py-0.5 text-xs font-normal italic">
+                                    {option.description}
+                                </SelectLabel>
+                            ) : null}
                         </SelectGroup>
                     ))}
                 </SelectContent>
             </Select>
         );
     }
+
     return (
         <span className={columnMeta?.breakAll ? "break-all" : undefined}>
             {value}
@@ -77,4 +65,4 @@ const TableCellSelect = ({
     );
 };
 
-export default TableCellSelect;
+export default EditableSelectTableCell;
