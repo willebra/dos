@@ -30,6 +30,18 @@ excludes:
     reason: "TEST_OF"
     comment: "This directory contains tests for SPDX validation."
 
+resolutions:
+  issues:
+  - message: "@img/sharp-wasm32@.*"
+    reason: "BUILD_TOOL_ISSUE"
+    comment: "npm ls reports @img/sharp-wasm32 and its nested @emnapi/runtime as
+      extraneous. It is a platform-specific WebAssembly build of sharp, depended on
+      only by @img/sharp-freebsd-wasm32 and @img/sharp-webcontainers-wasm32, which npm
+      skips on ORT's linux-x64 analyzer host; npm versions before 12 still install it,
+      leaving it without a dependant. sharp itself is an optional dependency of next,
+      used for image optimization; the extraneous wasm32 binary is not used on this
+      platform and does not affect dependency analysis."
+
 license_choices:
   repository_license_choices:
   - given: CC0-1.0 OR MIT
